@@ -3,60 +3,73 @@
 .dashboardContainer {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  padding: 1rem;
+  @media (min-width: v.$tablet) {
+    gap: 2rem;
+    padding: 0;
+  }
 }
 
 .welcome {
   h1 {
     color: v.$text-main;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
+    @media (min-width: v.$tablet) {
+      font-size: 1.8rem;
+    }
   }
   p {
     color: #64748b;
+    font-size: 0.9rem;
   }
 }
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
+  // Cambia a 1 columna en móvil, 2 en tablets y 4 en PC
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 500px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: v.$desktop) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .card {
   background: white;
-  padding: 1.5rem;
+  padding: 1.2rem;
   border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    @media (min-width: v.$tablet) {
+      transform: translateY(-3px);
+    }
+  }
+
+  span {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+  }
 
   .cardValue {
-    font-size: 1.5rem;
-    margin-top: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-top: 0.3rem;
     color: v.$text-main;
-  }
-}
-
-.iconContainer {
-  padding: 0.8rem;
-  border-radius: 12px;
-
-  &.purple {
-    background: v.$soft-purple;
-    color: v.$primary-purple;
-  }
-  &.gold {
-    background: #fffbeb;
-    color: v.$gold-accent;
-  }
-  &.green {
-    background: #f0fdf4;
-    color: #16a34a;
-  }
-  &.blue {
-    background: #eff6ff;
-    color: #2563eb;
+    @media (min-width: v.$tablet) {
+      font-size: 1.5rem;
+    }
   }
 }
