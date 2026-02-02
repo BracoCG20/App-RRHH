@@ -1,0 +1,211 @@
+@use '../../../styles/variables' as v;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.searchBar {
+  background: white;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 300px;
+  border: 1px solid #e2e8f0;
+
+  input {
+    border: none;
+    outline: none;
+    width: 100%;
+  }
+}
+
+.addBtn {
+  background: v.$primary-purple;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover {
+    background: v.$dark-purple;
+  }
+}
+
+.tableCard {
+  background: white;
+  border-radius: 20px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  th {
+    text-align: left;
+    padding: 1rem;
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+  td {
+    padding: 1rem;
+    border-top: 1px solid #f1f5f9;
+  }
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .avatar {
+    width: 35px;
+    height: 35px;
+    background: v.$soft-purple;
+    color: v.$primary-purple;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  .name {
+    font-weight: 600;
+    color: v.$text-main;
+    margin: 0;
+  }
+  .email {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin: 0;
+  }
+}
+
+.roleTag {
+  background: #f1f5f9;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.active {
+  color: #16a34a;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+
+  &:hover .dropdownMenu {
+    display: flex;
+  }
+}
+
+.actionsCell {
+  text-align: center;
+  position: relative;
+}
+
+.actionMenuBtn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    background: v.$soft-purple;
+    color: v.$primary-purple;
+    border-color: v.$primary-purple;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.dropdownMenuContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownMenu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: white;
+  min-width: 180px;
+  border-radius: 14px;
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  padding: 6px;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.2s ease-out;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: none;
+    background: none;
+    border-radius: 8px;
+    color: v.$text-main;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    &:hover {
+      background: #f8fafc;
+    }
+    svg {
+      color: #94a3b8;
+    }
+  }
+
+  .deleteOption {
+    color: #ef4444;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 4px;
+    padding-top: 10px;
+    &:hover {
+      background: #fef2f2;
+    }
+    svg {
+      color: #ef4444;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

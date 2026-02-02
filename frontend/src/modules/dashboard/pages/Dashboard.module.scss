@@ -1,0 +1,62 @@
+@use '../../../styles/variables' as v;
+
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.welcome {
+  h1 {
+    color: v.$text-main;
+    font-size: 1.8rem;
+  }
+  p {
+    color: #64748b;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+
+  .cardValue {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    color: v.$text-main;
+  }
+}
+
+.iconContainer {
+  padding: 0.8rem;
+  border-radius: 12px;
+
+  &.purple {
+    background: v.$soft-purple;
+    color: v.$primary-purple;
+  }
+  &.gold {
+    background: #fffbeb;
+    color: v.$gold-accent;
+  }
+  &.green {
+    background: #f0fdf4;
+    color: #16a34a;
+  }
+  &.blue {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+}
