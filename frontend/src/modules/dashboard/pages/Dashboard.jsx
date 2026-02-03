@@ -1,8 +1,8 @@
+import { useState, useEffect } from 'react';
 import { Users, Clock, AlertCircle, TrendingUp } from 'lucide-react';
+import { jwtDecode } from 'jwt-decode';
 import api from '../../../api/axios';
 import styles from './Dashboard.module.scss';
-import { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
 
 const StatCard = ({ title, value, icon, color }) => (
   <div className={styles.card}>
@@ -15,51 +15,90 @@ const StatCard = ({ title, value, icon, color }) => (
 );
 
 const Dashboard = () => {
-  const [serverStatus, setServerStatus] = useState('Conectando...');
+  const [stats, setStats] = useState({
+    totalEmpleados: 0,
+    presentesHoy: 0,
+    costoNomina: 0,
+    pendientesFirma: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  // Obtenemos info del usuario desde el token
   const token = localStorage.getItem('token');
-  const user = token ? jwtDecode(token) : null;
+  let userData = null;
+  if (token) {
+    try {
+      userData = jwtDecode(token);
+    } catch (e) {
+      console.error('Token inválido');
+    }
+  }
+
   useEffect(() => {
-    const checkHealth = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const response = await api.get('/health');
-        setServerStatus(`✅ ${response.data.message}`);
+        setLoading(true);
+        // Llamada al nuevo endpoint de estadísticas reales
+        const response = await api.get('/dashboard/stats');
+        setStats(response.data);
       } catch (error) {
-        setServerStatus('❌ Error al conectar con el servidor');
+        console.error('Error al cargar estadísticas del dashboard:', error);
+      } finally {
+        setLoading(false);
       }
     };
-    checkHealth();
+
+    fetchDashboardData();
   }, []);
+
+  // Cálculo de porcentaje de presentes
+  const asistenciaPorcentaje =
+    stats.totalEmpleados > 0
+      ? `${Math.round((stats.presentesHoy / stats.totalEmpleados) * 100)}%`
+      : '0%';
+
+  // Formateo de moneda para el costo de nómina
+  const formatoMoneda = (valor) => {
+    return new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP',
+      maximumFractionDigits: 0,
+    }).format(valor);
+  };
+
+  if (loading)
+    return <div className={styles.loading}>Actualizando métricas...</div>;
 
   return (
     <div className={styles.dashboardContainer}>
       <header className={styles.welcome}>
-        <h1>Bienvenido, {user?.nombres || 'Administrador'}</h1>
+        <h1>Bienvenido, {userData?.nombres || 'Administrador'}</h1>
         <p>Esto es lo que está pasando hoy en la empresa.</p>
       </header>
 
       <div className={styles.statsGrid}>
         <StatCard
           title='Total Empleados'
-          value='124'
-          icon={<Users />}
+          value={stats.totalEmpleados}
+          icon={<Users size={24} />}
           color='purple'
         />
         <StatCard
           title='Presentes Hoy'
-          value='98%'
-          icon={<Clock />}
+          value={asistenciaPorcentaje}
+          icon={<Clock size={24} />}
           color='green'
         />
         <StatCard
           title='Pendientes de Firma'
-          value='12'
-          icon={<AlertCircle />}
+          value={stats.pendientesFirma}
+          icon={<AlertCircle size={24} />}
           color='gold'
         />
         <StatCard
           title='Costo Nómina Mes'
-          value='$45.2M'
-          icon={<TrendingUp />}
+          value={formatoMoneda(stats.costoNomina)}
+          icon={<TrendingUp size={24} />}
           color='blue'
         />
       </div>

@@ -1,5 +1,5 @@
-import { useState } from 'react'; // Importamos el hook para el estado
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'; // Importamos useNavigate
 import {
   LayoutDashboard,
   Users,
@@ -9,22 +9,23 @@ import {
   Settings,
   Menu,
   X,
-  LogOut,
+  LogOut, // Importamos icono de salida
 } from 'lucide-react';
 import styles from './MainLayout.module.scss';
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook para redireccionar
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
+  // Función de Cierre de Sesión
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('token'); // Limpiamos seguridad
     localStorage.removeItem('user');
-    navigate('/login');
+    navigate('/login'); // Al login de inmediato
   };
 
   const menuItems = [
@@ -72,7 +73,7 @@ const MainLayout = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                onClick={closeMenu} // Cerramos el menú al navegar
+                onClick={closeMenu}
                 className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
               >
                 {item.icon}
@@ -81,6 +82,7 @@ const MainLayout = () => {
             ))}
           </div>
 
+          {/* BOTÓN DE LOGOUT AL FINAL DEL SIDEBAR */}
           <button
             onClick={handleLogout}
             className={styles.logoutBtn}
@@ -105,7 +107,11 @@ const MainLayout = () => {
                 'Sistema'}
             </h2>
           </div>
-          <div className={styles.userProfile}>
+          <div
+            className={styles.userProfile}
+            onClick={handleLogout}
+            title='Cerrar Sesión'
+          >
             <div className={styles.avatar}>JD</div>
           </div>
         </header>

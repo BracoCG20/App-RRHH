@@ -5,6 +5,8 @@ import pool from './config/db.js';
 import authRoutes from './modules/auth/auth.routes.js';
 import asistenciaRoutes from './modules/asistencia/asistencia.routes.js';
 import usuariosRoutes from './modules/usuarios/usuarios.routes.js';
+import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
+import remuneracionesRoutes from './modules/remuneraciones/remuneraciones.routes.js';
 dotenv.config();
 
 const app = express();
@@ -15,6 +17,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/asistencia', asistenciaRoutes);
 app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/remuneraciones', remuneracionesRoutes);
 
 app.get('/api/health', async (req, res) => {
   try {

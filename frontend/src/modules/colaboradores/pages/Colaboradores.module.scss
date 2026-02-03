@@ -61,7 +61,7 @@
 .tableCard {
   background: white;
   border-radius: 20px;
-  overflow: hidden;
+  overflow: visible !important;
   padding: 1rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
@@ -81,6 +81,7 @@
     font-size: 0.85rem;
   }
   tr {
+    overflow: visible !important;
     @media (max-width: v.$tablet) {
       display: block;
       border-bottom: 1px solid #f1f5f9;
@@ -89,6 +90,7 @@
     }
   }
   td {
+    overflow: visible !important;
     padding: 1rem;
     border-top: 1px solid #f1f5f9;
 
@@ -150,11 +152,19 @@
 }
 
 .active {
-  color: #16a34a;
-  font-size: 0.85rem;
+  color: #16a34a; // Verde
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-
+.inactive {
+  color: #94a3b8; // Gris
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 .dropdownContainer {
   position: relative;
   display: inline-block;
@@ -202,6 +212,7 @@
   top: calc(100% + 8px);
   background: white;
   min-width: 180px;
+  z-index: 9999;
   border-radius: 14px;
   box-shadow:
     0 10px 25px -5px rgba(0, 0, 0, 0.1),

@@ -7,8 +7,9 @@ import styles from './Colaboradores.module.scss';
 const Colaboradores = () => {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [usuarioAEditar, setUsuarioAEditar] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeMenu, setActiveMenu] = useState(null); // Control para el menú abierto
+  const [activeMenu, setActiveMenu] = useState(null);
 
   const fetchUsers = async () => {
     try {
@@ -23,31 +24,29 @@ const Colaboradores = () => {
     fetchUsers();
   }, []);
 
+  const handleOpenModal = (user = null) => {
+    setUsuarioAEditar(user);
+    setIsModalOpen(true);
+    setActiveMenu(null);
+  };
+
   const handleEliminar = async (id, nombre) => {
-    setActiveMenu(null); // Cerrar menú antes de la alerta
+    setActiveMenu(null);
     if (window.confirm(`¿Estás seguro de que deseas eliminar a ${nombre}?`)) {
       try {
         await api.delete(`/usuarios/${id}`);
         setUsers(users.filter((user) => user.id !== id));
-        alert('Colaborador eliminado correctamente');
       } catch (error) {
-        alert(error.response?.data?.error || 'No se pudo eliminar');
+        alert('No se pudo eliminar por registros vinculados');
       }
     }
-  };
-
-  const handleEdit = (user) => {
-    setActiveMenu(null);
-    alert(
-      `Editando a ${user.nombres}... (Aquí abriremos el Modal de Edición próximamente)`,
-    );
   };
 
   const filteredUsers = users.filter(
     (user) =>
       `${user.nombres} ${user.apellidos}`
         .toLowerCase()
-        .includes(searchTerm.toLowerCase()) || user.rut.includes(searchTerm),
+        .includes(searchTerm.toLowerCase()) || user.dni?.includes(searchTerm),
   );
 
   return (
@@ -57,17 +56,16 @@ const Colaboradores = () => {
           <Search size={18} />
           <input
             type='text'
-            placeholder='Buscar por nombre o RUT...'
+            placeholder='Buscar por nombre o DNI...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <button
           className={styles.addBtn}
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => handleOpenModal()}
         >
-          <UserPlus size={18} />
-          Nuevo Colaborador
+          <UserPlus size={18} /> Nuevo Colaborador
         </button>
       </header>
 
@@ -76,9 +74,8 @@ const Colaboradores = () => {
           <thead>
             <tr>
               <th>Colaborador</th>
-              <th>RUT</th>
+              <th>DNI</th>
               <th>Cargo</th>
-              <th>Rol</th>
               <th>Estado</th>
               <th style={{ textAlign: 'center' }}>Acciones</th>
             </tr>
@@ -97,11 +94,8 @@ const Colaboradores = () => {
                     </div>
                   </div>
                 </td>
-                <td>{user.rut}</td>
+                <td>{user.dni}</td>
                 <td>{user.cargo || 'No asignado'}</td>
-                <td>
-                  <span className={styles.roleTag}>{user.rol}</span>
-                </td>
                 <td>
                   <span
                     className={user.activo ? styles.active : styles.inactive}
@@ -122,7 +116,7 @@ const Colaboradores = () => {
 
                     {activeMenu === user.id && (
                       <div className={styles.dropdownMenu}>
-                        <button onClick={() => handleEdit(user)}>
+                        <button onClick={() => handleOpenModal(user)}>
                           <Edit2 size={14} /> Editar
                         </button>
                         <button
@@ -143,6 +137,7 @@ const Colaboradores = () => {
 
       <ModalNuevoColaborador
         isOpen={isModalOpen}
+        usuarioAEditar={usuarioAEditar}
         onClose={() => setIsModalOpen(false)}
         onSuccess={fetchUsers}
       />
