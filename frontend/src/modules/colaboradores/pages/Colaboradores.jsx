@@ -3,6 +3,7 @@ import api from '../../../api/axios';
 import { UserPlus, Search, MoreVertical, Trash2, Edit2 } from 'lucide-react';
 import ModalNuevoColaborador from '../components/ModalNuevoColaborador.jsx';
 import styles from './Colaboradores.module.scss';
+import Swal from 'sweetalert2';
 
 const Colaboradores = () => {
   const [users, setUsers] = useState([]);
@@ -37,7 +38,12 @@ const Colaboradores = () => {
         await api.delete(`/usuarios/${id}`);
         setUsers(users.filter((user) => user.id !== id));
       } catch (error) {
-        alert('No se pudo eliminar por registros vinculados');
+        Swal.fire({
+          title: '¡Error!',
+          text: 'No se pudo eliminar por registros vinculados',
+          icon: 'error',
+          confirmButtonColor: '#f34444', // Color de tu tema
+        });
       }
     }
   };
