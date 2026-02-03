@@ -1,5 +1,5 @@
 import { useState } from 'react'; // Importamos el hook para el estado
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Users,
@@ -9,20 +9,32 @@ import {
   Settings,
   Menu,
   X,
+  LogOut,
 } from 'lucide-react';
 import styles from './MainLayout.module.scss';
 
 const MainLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
+
   const menuItems = [
     { path: '/', name: 'Dashboard', icon: <LayoutDashboard size={20} /> },
     { path: '/asistencia', name: 'Asistencia', icon: <Clock size={20} /> },
-    { path: '/nomina', name: 'Remuneraciones', icon: <CreditCard size={20} /> },
+    {
+      path: '/remuneraciones',
+      name: 'Remuneraciones',
+      icon: <CreditCard size={20} />,
+    },
     {
       path: '/colaboradores',
       name: 'Colaboradores',
@@ -33,7 +45,6 @@ const MainLayout = () => {
 
   return (
     <div className={styles.container}>
-      {/* Overlay para móviles */}
       {isMenuOpen && (
         <div
           className={styles.overlay}
@@ -56,17 +67,27 @@ const MainLayout = () => {
         </div>
 
         <nav className={styles.nav}>
-          {menuItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={closeMenu} // Cerramos el menú al navegar
-              className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
-            >
-              {item.icon}
-              <span>{item.name}</span>
-            </Link>
-          ))}
+          <div className={styles.navLinks}>
+            {menuItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={closeMenu} // Cerramos el menú al navegar
+                className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
+              >
+                {item.icon}
+                <span>{item.name}</span>
+              </Link>
+            ))}
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className={styles.logoutBtn}
+          >
+            <LogOut size={20} />
+            <span>Cerrar Sesión</span>
+          </button>
         </nav>
       </aside>
 

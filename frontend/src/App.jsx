@@ -7,6 +7,7 @@ import Login from './modules/auth/pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Asistencia from './modules/asistencia/pages/Asistencia';
 import Colaboradores from './modules/colaboradores/pages/Colaboradores';
+import Remuneraciones from './modules/remuneraciones/pages/Remuneraciones';
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
           <Route
             path='colaboradores'
             element={<Colaboradores />}
+          />
+          <Route
+            path='remuneraciones'
+            element={<Remuneraciones />}
           />
         </Route>
       </Routes>
