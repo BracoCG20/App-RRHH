@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '../../../api/axios';
 import { Download, FileText, RefreshCw, DollarSign } from 'lucide-react';
 import ModalContrato from '../components/ModalContrato';
-import ModalBoleta from '../components/ModalBoleta'; // Importamos el nuevo modal de boleta
+import ModalBoleta from '../components/ModalBoleta';
 import styles from './Remuneraciones.module.scss';
 
 const Remuneraciones = () => {
@@ -13,7 +13,6 @@ const Remuneraciones = () => {
   const [isModalBoletaOpen, setIsModalBoletaOpen] = useState(false);
   const [selectedUserForBoleta, setSelectedUserForBoleta] = useState(null);
 
-  // Datos fiscales de la empresa para la boleta
   const datosEmpresa = {
     ruc: '20600000000',
     nombre_fiscal: 'BRACO SOLUTIONS S.A.C.',
@@ -33,9 +32,21 @@ const Remuneraciones = () => {
     fetchNomina();
   }, []);
 
-  const calcularNetoReal = (montoBruto) => {
-    const tasaDescuento = 0.13; // 13% promedio (AFP/ONP)
-    return montoBruto * (1 - tasaDescuento);
+  // LÓGICA DE CÁLCULO DIFERENCIADA
+  const calcularNetoReal = (item) => {
+    const cargo = item.cargo?.toLowerCase() || '';
+    // Si no hay asistencias marcadas, usamos el sueldo base como referencia para no mostrar 0.00
+    const montoReferencia =
+      item.sueldo_proyectado > 0 ? item.sueldo_proyectado : item.sueldo_base;
+
+    // PRACTICANTES: Reciben subvención económica líquida (sin descuentos de ley)
+    if (cargo.includes('practicante')) {
+      return montoReferencia;
+    }
+
+    // EMPLEADOS: Retención estándar (AFP/ONP ~13%)
+    const tasaDescuento = 0.13;
+    return montoReferencia * (1 - tasaDescuento);
   };
 
   const formatMoney = (amount) => {
@@ -81,11 +92,9 @@ const Remuneraciones = () => {
               Dólares ($)
             </button>
           </div>
-
           <button className={styles.exportBtn}>
             <Download size={18} /> Exportar PLAME (SUNAT)
           </button>
-
           <button
             className={styles.addSalaryBtn}
             onClick={() => setIsModalContratoOpen(true)}
@@ -98,7 +107,7 @@ const Remuneraciones = () => {
       <div className={styles.grid}>
         {nomina.length > 0 ? (
           nomina.map((item, index) => {
-            const netoProyectado = calcularNetoReal(item.sueldo_proyectado);
+            const netoAPagar = calcularNetoReal(item);
 
             return (
               <div
@@ -115,7 +124,7 @@ const Remuneraciones = () => {
                       {item.cargo || 'Sin cargo'}
                     </small>
                   </div>
-                  {/* Círculo de estado dinámico */}
+                  {/* Badge de estado profesional */}
                   <div
                     className={
                       item.activo !== false
@@ -123,13 +132,13 @@ const Remuneraciones = () => {
                         : styles.badgeInactive
                     }
                   >
-                    {item.activo !== false ? '● Activo' : '○ Inactivo'}
+                    {item.activo !== false ? 'Activo' : 'Inactivo'}
                   </div>
                 </div>
 
                 <div className={styles.mainAmount}>
                   <p>Neto Proyectado (a pagar)</p>
-                  <h3>{formatMoney(netoProyectado)}</h3>
+                  <h3>{formatMoney(netoAPagar)}</h3>
                 </div>
 
                 <div className={styles.footer}>
@@ -150,14 +159,11 @@ const Remuneraciones = () => {
         )}
       </div>
 
-      {/* Modal de Configuración de Contratos */}
       <ModalContrato
         isOpen={isModalContratoOpen}
         onClose={() => setIsModalContratoOpen(false)}
         onSuccess={fetchNomina}
       />
-
-      {/* Modal de Visualización de Boleta */}
       <ModalBoleta
         isOpen={isModalBoletaOpen}
         onClose={() => setIsModalBoletaOpen(false)}

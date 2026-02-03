@@ -21,19 +21,29 @@ export const getUsuarios = async (req, res) => {
 };
 
 export const crearUsuario = async (req, res) => {
-  const { dni, nombres, apellidos, email, password, rol, cargo, direccion } =
-    req.body;
+  const {
+    rut,
+    dni,
+    nombres,
+    apellidos,
+    email,
+    password,
+    rol,
+    cargo,
+    direccion,
+  } = req.body;
   try {
     const salt = await bcrypt.genSalt(10);
-    // Password por defecto son los primeros 4 dígitos del DNI
-    const hash = await bcrypt.hash(password || dni.substring(0, 4), salt);
+    // Usamos el RUT o DNI para la contraseña inicial si no se provee una
+    const hash = await bcrypt.hash(password || rut || dni, salt);
 
     const query = `
-      INSERT INTO usuarios (dni, nombres, apellidos, email, password_hash, rol, cargo, direccion, activo)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, true)
+      INSERT INTO usuarios (rut, dni, nombres, apellidos, email, password_hash, rol, cargo, direccion, activo)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, true)
       RETURNING id, nombres, apellidos;
     `;
     const result = await pool.query(query, [
+      rut,
       dni,
       nombres,
       apellidos,

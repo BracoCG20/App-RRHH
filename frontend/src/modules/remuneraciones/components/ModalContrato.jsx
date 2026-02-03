@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Search, TrendingUp } from 'lucide-react';
 import api from '../../../api/axios';
+import Swal from 'sweetalert2';
 import styles from './ModalContrato.module.scss';
 
 const ModalContrato = ({ isOpen, onClose, onSuccess }) => {
@@ -33,7 +34,12 @@ const ModalContrato = ({ isOpen, onClose, onSuccess }) => {
         ...formData,
         usuario_id: selectedUser.id,
       });
-      alert('Contrato/Ascenso procesado correctamente');
+      Swal.fire({
+        title: 'Exito',
+        text: 'Contrato/Ascenso procesado correctamente',
+        icon: 'success',
+        confirmButtonColor: '#6366f1',
+      });
       onSuccess();
       onClose();
     } catch (error) {

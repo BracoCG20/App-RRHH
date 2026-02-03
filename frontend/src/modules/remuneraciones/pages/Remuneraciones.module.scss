@@ -121,6 +121,27 @@
   }
 }
 
+// Reemplaza o añade estas clases
+.badgeActive {
+  background: #dcfce7; // Verde suave
+  color: #15803d; // Verde oscuro
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  height: fit-content;
+}
+
+.badgeInactive {
+  background: #f1f5f9; // Gris suave
+  color: #64748b; // Gris oscuro
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  height: fit-content;
+}
+
 .mainAmount {
   background: v.$soft-purple;
   padding: 1.2rem;

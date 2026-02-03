@@ -59,9 +59,9 @@ const Dashboard = () => {
 
   // Formateo de moneda para el costo de nómina
   const formatoMoneda = (valor) => {
-    return new Intl.NumberFormat('es-CL', {
+    return new Intl.NumberFormat('es-PE', {
       style: 'currency',
-      currency: 'CLP',
+      currency: 'PEN',
       maximumFractionDigits: 0,
     }).format(valor);
   };

@@ -68,6 +68,11 @@
     font-size: 0.85rem;
     color: #64748b;
   }
+  .inputGroup {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
   input,
   select {
     padding: 0.8rem;
@@ -115,8 +120,31 @@
   }
 }
 
+.magicBtn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    background: v.$soft-purple;
+    color: v.$primary-purple;
+    border-color: v.$primary-purple;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+}
+
 .error {
   color: #ef4444;
   font-size: 0.75rem;
   margin-top: -0.2rem;
+}
+
+.readOnlyInput {
+  background-color: #f1f5f9 !important; // Gris claro para indicar bloqueo
+  color: #64748b !important;
+  cursor: not-allowed;
+  border: 1px dashed #cbd5e1 !important;
 }

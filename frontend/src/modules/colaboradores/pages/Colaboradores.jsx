@@ -46,7 +46,9 @@ const Colaboradores = () => {
     (user) =>
       `${user.nombres} ${user.apellidos}`
         .toLowerCase()
-        .includes(searchTerm.toLowerCase()) || user.dni?.includes(searchTerm),
+        .includes(searchTerm.toLowerCase()) ||
+      user.dni?.includes(searchTerm) ||
+      user.rut?.includes(searchTerm),
   );
 
   return (
@@ -56,7 +58,7 @@ const Colaboradores = () => {
           <Search size={18} />
           <input
             type='text'
-            placeholder='Buscar por nombre o DNI...'
+            placeholder='Buscar por nombre, DNI o RUT...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -74,6 +76,7 @@ const Colaboradores = () => {
           <thead>
             <tr>
               <th>Colaborador</th>
+              <th>RUT</th>
               <th>DNI</th>
               <th>Cargo</th>
               <th>Estado</th>
@@ -94,6 +97,8 @@ const Colaboradores = () => {
                     </div>
                   </div>
                 </td>
+                {/* Restauramos visualización del RUT */}
+                <td>{user.rut || '-'}</td>
                 <td>{user.dni}</td>
                 <td>{user.cargo || 'No asignado'}</td>
                 <td>
